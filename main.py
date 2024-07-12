@@ -10,6 +10,7 @@ from PIL import Image, ImageDraw
 import keyboard
 from threading import Event
 import os
+from datetime import datetime
 
 # Load main configuration
 with open('config.json', 'r') as f:
@@ -46,25 +47,32 @@ def show_exit_stats():
     )
     root.destroy()
 
+    # Log the saves to save.log
+    username = os.getlogin()
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    with open('save.log', 'a') as log_file:
+        log_file.write(f"{current_time} - {username} - User saves: {numberSave - autoSave}, Auto saves: {autoSave}\n")
+
 def check_save_reminder():
     while not terminate_event.is_set():
-        if is_word_active():
+        if is_app_active():
             current_time = time.time()
             reminder_delay = random.uniform(config['min_delay'], config['max_delay'])
             if current_time - last_save_time > reminder_delay:
                 debug_print(f"{reminder_delay / 60:.2f} minutes have passed since the last save.")
                 show_save_reminder(reminder_delay / 60)
         else:
-            debug_print("Microsoft Word is not the active window.")
+            debug_print("None of the specified applications is the active window.")
         time.sleep(10)  # Check every 10 seconds
 
-def is_word_active():
+def is_app_active():
     try:
         active_window = gw.getActiveWindowTitle()
         if active_window:
             debug_print(f"Active window title: {active_window}")
-            if "word" in active_window.lower():
-                return True
+            for app in config['applications']:
+                if app.lower() in active_window.lower():
+                    return True
     except Exception as e:
         debug_print(f"Error checking active window: {e}")
     return False
@@ -93,16 +101,18 @@ def show_save_reminder(minutes):
         root.destroy()
 
 def simulate_ctrl_s():
-    debug_print("Simulating Ctrl+S keypress.")
-    keyboard.press_and_release('ctrl+s')
-    on_ctrl_s()
+    if is_app_active():
+        debug_print("Simulating Ctrl+S keypress.")
+        keyboard.press_and_release('ctrl+s')
+        on_ctrl_s()
 
 def on_ctrl_s():
-    global last_save_time
-    global numberSave
-    last_save_time = time.time()
-    numberSave += 1
-    debug_print("Ctrl+S was pressed. Updating last save time.")
+    if is_app_active():
+        global last_save_time
+        global numberSave
+        last_save_time = time.time()
+        numberSave += 1
+        debug_print("Ctrl+S was pressed. Updating last save time.")
 
 def create_image():
     width = 64
