@@ -13,12 +13,12 @@ import os
 from datetime import datetime
 
 # Load main configuration
-with open('config.json', 'r') as f:
+with open('config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
 
 # Load language configuration
 lang_file_path = os.path.join('./locals', f"{config['language']}.json")
-with open(lang_file_path, 'r') as f:
+with open(lang_file_path, 'r', encoding='utf-8') as f:
     lang_config = json.load(f)
 
 # Global variables
@@ -50,7 +50,7 @@ def show_exit_stats():
     # Log the saves to save.log
     username = os.getlogin()
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    with open('save.log', 'a') as log_file:
+    with open('save.log', 'a', encoding='utf-8') as log_file:
         log_file.write(f"{current_time} - {username} - User saves: {numberSave - autoSave}, Auto saves: {autoSave}\n")
 
 def check_save_reminder():
