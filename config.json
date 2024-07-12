@@ -1,0 +1,10 @@
+{
+    "language": "en",
+    "messages": {
+        "en": "Remember to save your work!",
+        "fr": "N'oubliez pas de sauvegarder votre travail!",
+        "es": "¡Recuerda guardar tu trabajo!"
+    },
+    "min_delay": 10,
+    "max_delay": 30
+}
