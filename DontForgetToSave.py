@@ -15,12 +15,19 @@ from datetime import datetime
 import winshell
 from win32com.client import Dispatch
 
+# Determine if application is a script file or frozen exe
+if getattr(sys, 'frozen', False):
+    application_path = os.path.dirname(sys.executable)
+else:
+    application_path = os.path.dirname(os.path.abspath(__file__))
+
 # Load main configuration
-with open('config.json', 'r', encoding='utf-8') as f:
+config_path = os.path.join(application_path, 'config.json')
+with open(config_path, 'r', encoding='utf-8') as f:
     config = json.load(f)
 
 # Load language configuration
-lang_file_path = os.path.join('./locals', f"{config['language']}.json")
+lang_file_path = os.path.join(application_path, 'locals', f"{config['language']}.json")
 with open(lang_file_path, 'r', encoding='utf-8') as f:
     lang_config = json.load(f)
 

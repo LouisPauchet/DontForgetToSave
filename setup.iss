@@ -10,7 +10,7 @@ AllowNoIcons=yes
 RestartIfNeededByRun=false
 
 [Files]
-Source: "dist\DontForgetToSave.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\DontForgetToSave\DontForgetToSave.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\DontForgetToSave"; Filename: "{app}\DontForgetToSave.exe"
