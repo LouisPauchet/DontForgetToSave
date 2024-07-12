@@ -6,6 +6,9 @@ from tkinter import messagebox
 import pygetwindow as gw
 import json
 import random
+import pystray
+from PIL import Image, ImageDraw
+from threading import Event
 
 # Load configuration
 with open('config.json', 'r') as f:
@@ -15,12 +18,15 @@ with open('config.json', 'r') as f:
 last_save_time = time.time()
 debug = True  # Set this to False to disable debug prints
 
+# Event to signal the script should terminate
+terminate_event = Event()
+
 def debug_print(message):
     if debug:
         print(message)
 
 def check_save_reminder():
-    while True:
+    while not terminate_event.is_set():
         if is_word_active():
             current_time = time.time()
             reminder_delay = random.uniform(config['min_delay'], config['max_delay'])
@@ -77,13 +83,40 @@ def on_ctrl_s():
     last_save_time = time.time()
     debug_print("Ctrl+S was pressed. Updating last save time.")
 
+def create_image():
+    # Generate an image for the system tray icon
+    width = 64
+    height = 64
+    image = Image.new('RGB', (width, height), (255, 255, 255))
+    draw = ImageDraw.Draw(image)
+    draw.rectangle(
+        (width // 2 - 10, height // 2 - 10, width // 2 + 10, height // 2 + 10),
+        fill="black")
+    return image
+
+def on_exit(icon, item):
+    debug_print("Exiting script.")
+    terminate_event.set()
+    icon.stop()
+
+def setup_tray_icon():
+    icon_image = create_image()
+    icon = pystray.Icon("Save Reminder", icon_image, "Save Reminder", menu=pystray.Menu(
+        pystray.MenuItem("Exit", on_exit)
+    ))
+    icon.run()
+
 def main():
     debug_print("Starting the save reminder script.")
     keyboard.add_hotkey('ctrl+s', on_ctrl_s)
     reminder_thread = threading.Thread(target=check_save_reminder)
     reminder_thread.daemon = True
     reminder_thread.start()
-    keyboard.wait('esc')  # Keep the script running until 'esc' is pressed
+    tray_thread = threading.Thread(target=setup_tray_icon)
+    tray_thread.daemon = True
+    tray_thread.start()
+    while not terminate_event.is_set():
+        time.sleep(1)
     debug_print("Script has been terminated.")
 
 if __name__ == "__main__":
