@@ -32,11 +32,11 @@ jobs:
       run: pyinstaller --onefile --windowed DontForgetToSave.py
 
     - name: Download Inno Setup
-      run: |
-        curl -Lo isetup.exe https://jrsoftware.org/download.php/is.exe
+      run: curl -Lo isetup.exe https://jrsoftware.org/download.php/is.exe
 
     - name: Install Inno Setup
-      run: isetup.exe /silent /dir="C:\Program Files (x86)\Inno Setup 6"
+      run: |
+        start /wait isetup.exe /silent /dir="C:\Program Files (x86)\Inno Setup 6"
 
     - name: Run Inno Setup
       run: |
@@ -45,5 +45,5 @@ jobs:
     - name: Upload installer
       uses: actions/upload-artifact@v2
       with:
-        name: DontForgetToSave
-        path: DontForgetToSave.exe
+        name: DontForgetToSave_installer
+        path: DontForgetToSave_installer.exe
