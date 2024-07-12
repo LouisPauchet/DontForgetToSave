@@ -1,7 +1,6 @@
 {
-    "language": "en",
-    "min_delay": 10,
-    "max_delay": 30,
-    "applications": ["word", "visual studio code"]
-  }
-  
+  "language": "en",
+  "min_delay": 300,
+  "max_delay": 1800,
+  "applications": ["Notepad", "Word", "Excel"]
+}
