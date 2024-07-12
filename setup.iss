@@ -5,7 +5,7 @@ DefaultDirName={pf}\DontForgetToSave
 DefaultGroupName=DontForgetToSave
 OutputDir=.
 OutputBaseFilename=DontForgetToSave_installer
-PrivilegesRequired=lowest
+PrivilegesRequired=admin
 AllowNoIcons=yes
 RestartIfNeededByRun=false
 
