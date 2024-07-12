@@ -35,8 +35,8 @@ jobs:
       run: curl -Lo isetup.exe https://jrsoftware.org/download.php/is.exe
 
     - name: Install Inno Setup
-      run: |
-        start /wait isetup.exe /silent /dir="C:\Program Files (x86)\Inno Setup 6"
+      shell: pwsh
+      run: Start-Process -FilePath ./isetup.exe -ArgumentList '/silent', '/dir="C:\Program Files (x86)\Inno Setup 6"' -NoNewWindow -Wait
 
     - name: Run Inno Setup
       run: |
