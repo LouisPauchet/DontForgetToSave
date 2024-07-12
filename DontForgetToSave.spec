@@ -7,8 +7,8 @@ a = Analysis(
     pathex=['.'],
     binaries=[],
     datas=[
-        ('config.json', '.'),
-        ('locals/*.json', 'locals'),
+        ('config.json', '.'),  # Include config.json
+        ('locals/*.json', 'locals'),  # Include all JSON files in the locals folder
     ],
     hiddenimports=[],
     hookspath=[],
@@ -27,7 +27,7 @@ exe = EXE(
     pyz,
     a.scripts,
     [],
-    exclude_binaries=False,  # Ensure binaries are not excluded
+    exclude_binaries=False,
     name='DontForgetToSave',
     debug=False,
     bootloader_ignore_signals=False,
