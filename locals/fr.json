@@ -1,0 +1,6 @@
+{
+    "exit_title": "Sortie",
+    "exit_message": "Vous avez enregistré votre document {user_saves} fois et je l'ai enregistré pour vous {auto_saves} fois.",
+    "save_reminder_title": "Rappel de sauvegarde",
+    "save_reminder_message": "{minutes} minutes se sont écoulées depuis votre dernière sauvegarde. Voulez-vous enregistrer maintenant?"
+}

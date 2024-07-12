@@ -9,10 +9,16 @@ import pystray
 from PIL import Image, ImageDraw
 import keyboard
 from threading import Event
+import os
 
-# Load configuration
+# Load main configuration
 with open('config.json', 'r') as f:
     config = json.load(f)
+
+# Load language configuration
+lang_file_path = os.path.join('./locals', f"{config['language']}.json")
+with open(lang_file_path, 'r') as f:
+    lang_config = json.load(f)
 
 # Global variables
 last_save_time = time.time()
@@ -33,7 +39,11 @@ def show_exit_stats():
     root.withdraw()  # Hide the root window
     root.attributes("-topmost", True)  # Ensure the window is on top
 
-    messagebox.showinfo("Exit", f"You saved your document {numberSave - autoSave} times and I saved it for you {autoSave} times.", parent=root)
+    messagebox.showinfo(
+        lang_config["exit_title"], 
+        lang_config["exit_message"].format(user_saves=numberSave - autoSave, auto_saves=autoSave),
+        parent=root
+    )
     root.destroy()
 
 def check_save_reminder():
@@ -73,10 +83,8 @@ def show_save_reminder(minutes):
         simulate_ctrl_s()
         autoSave += 1
 
-    message_template = config['messages'].get(config['language'], config['messages']['en'])
-    message = message_template.format(minutes=int(minutes))
-
-    response = messagebox.askokcancel("Save Reminder", message, parent=root)
+    message = lang_config["save_reminder_message"].format(minutes=int(minutes))
+    response = messagebox.askokcancel(lang_config["save_reminder_title"], message, parent=root)
 
     if response:
         on_ok()

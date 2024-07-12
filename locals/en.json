@@ -1,0 +1,6 @@
+{
+    "exit_title": "Exit",
+    "exit_message": "You saved your document {user_saves} times and I saved it for you {auto_saves} times.",
+    "save_reminder_title": "Save Reminder",
+    "save_reminder_message": "{minutes} minutes have passed since your last save. Would you like to save now?"
+}

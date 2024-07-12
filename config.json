@@ -1,10 +1,5 @@
 {
-    "language": "en",
-    "messages": {
-      "en": "You haven't saved your document in the last {minutes} minutes. Do you want to save now?",
-      "es": "No has guardado tu documento en los últimos {minutes} minutos. ¿Quieres guardar ahora?",
-      "fr": "Vous n'avez pas enregistré votre document au cours des {minutes} dernières minutes. Voulez-vous enregistrer maintenant?"
-    },
+    "language": "fr",
     "min_delay": 10,
     "max_delay": 30
   }
