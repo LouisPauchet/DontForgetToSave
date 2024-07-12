@@ -17,6 +17,21 @@ This application reminds you to save your work at random intervals while specifi
 
 ## Installation
 
+1. **Download the Installer**:
+   Go to the [latest release](https://github.com/yourusername/save-reminder/releases/latest) and download the `save_reminder_installer.exe`.
+
+2. **Run the Installer**:
+   Run the downloaded installer and follow the on-screen instructions.
+
+3. **Autostart (Optional)**:
+   During installation, you can choose to add the application to start automatically when Windows starts.
+
+## Usage
+
+After installation, the application will monitor the specified applications and remind you to save your work at random intervals. A system tray icon will be available for quick access to exit the application.
+
+## Installation for Development
+
 1. **Clone the repository**:
     ```bash
     git clone https://github.com/yourusername/save-reminder.git
@@ -65,7 +80,7 @@ Place the appropriate language JSON file in the `locals` directory. Example: `./
 }
 ```
 
-## Usage
+## Running the Application
 
 1. **Run the application**:
     ```bash
@@ -90,7 +105,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgements
 
-- The application uses several Python libraries such as `pygetwindow`, `pystray`, `Pillow`, and `keyboard`.
+The application uses several Python libraries such as `pygetwindow`, `pystray`, `Pillow`, and `keyboard`.
 
 ## Contributing
 
