@@ -1,5 +1,5 @@
 {
-    "language": "fr",
+    "language": "en",
     "min_delay": 10,
     "max_delay": 30,
     "applications": ["word", "visual studio code"]
