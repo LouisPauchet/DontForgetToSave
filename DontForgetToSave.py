@@ -1,3 +1,5 @@
+import os
+import sys
 import time
 import threading
 import tkinter as tk
@@ -9,8 +11,9 @@ import pystray
 from PIL import Image, ImageDraw
 import keyboard
 from threading import Event
-import os
 from datetime import datetime
+import winshell
+from win32com.client import Dispatch
 
 # Load main configuration
 with open('config.json', 'r', encoding='utf-8') as f:
@@ -135,6 +138,19 @@ def setup_tray_icon():
     ))
     icon.run()
 
+def create_shortcut():
+    startup_folder = winshell.startup()
+    shortcut_path = os.path.join(startup_folder, "Save Reminder.lnk")
+    target = sys.executable  # Path to the executable
+    icon = target
+
+    shell = Dispatch('WScript.Shell')
+    shortcut = shell.CreateShortCut(shortcut_path)
+    shortcut.TargetPath = target
+    shortcut.WorkingDirectory = os.path.dirname(target)
+    shortcut.IconLocation = icon
+    shortcut.save()
+
 def main():
     debug_print("Starting the save reminder script.")
     keyboard.add_hotkey('ctrl+s', on_ctrl_s)
@@ -144,6 +160,7 @@ def main():
     tray_thread = threading.Thread(target=setup_tray_icon)
     tray_thread.daemon = True
     tray_thread.start()
+    create_shortcut()
     while not terminate_event.is_set():
         time.sleep(1)
     debug_print("Script has been terminated.")

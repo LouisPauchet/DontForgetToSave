@@ -1,0 +1,49 @@
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x' # Replace with your required Python version
+
+    - name: Install dependencies
+      run: |
+        pip install pyinstaller winshell pywin32
+        pip install -r requirements.txt
+
+    - name: Build executable
+      run: pyinstaller --onefile --windowed save_reminder.py
+
+    - name: Download Inno Setup
+      run: |
+        curl -Lo isetup.exe https://jrsoftware.org/download.php/is.exe
+
+    - name: Install Inno Setup
+      run: isetup.exe /silent /dir="C:\Program Files (x86)\Inno Setup 6"
+
+    - name: Run Inno Setup
+      run: |
+        "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup.iss
+
+    - name: Upload installer
+      uses: actions/upload-artifact@v2
+      with:
+        name: save_reminder_installer
+        path: save_reminder_installer.exe
