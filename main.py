@@ -1,4 +1,3 @@
-import keyboard
 import time
 import threading
 import tkinter as tk
@@ -8,22 +7,34 @@ import json
 import random
 import pystray
 from PIL import Image, ImageDraw
+import keyboard
 from threading import Event
 
 # Load configuration
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-# Global variable to track the last time "Ctrl + S" was pressed
+# Global variables
 last_save_time = time.time()
 debug = True  # Set this to False to disable debug prints
-
-# Event to signal the script should terminate
 terminate_event = Event()
+numberSave = 0
+autoSave = 0
 
 def debug_print(message):
     if debug:
         print(message)
+
+def show_exit_stats():
+    global numberSave
+    global autoSave
+
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    root.attributes("-topmost", True)  # Ensure the window is on top
+
+    messagebox.showinfo("Exit", f"You saved your document {numberSave - autoSave} times and I saved it for you {autoSave} times.", parent=root)
+    root.destroy()
 
 def check_save_reminder():
     while not terminate_event.is_set():
@@ -49,23 +60,23 @@ def is_word_active():
     return False
 
 def show_save_reminder(minutes):
+    global autoSave
     debug_print("Displaying save reminder popup.")
     root = tk.Tk()
     root.withdraw()  # Hide the root window
     root.attributes("-topmost", True)  # Ensure the window is on top
 
-    # Function to handle the save action
     def on_ok():
+        global autoSave
         debug_print("User chose to save the document.")
         root.destroy()
         simulate_ctrl_s()
+        autoSave += 1
 
-    # Get the message in the configured language
     message_template = config['messages'].get(config['language'], config['messages']['en'])
     message = message_template.format(minutes=int(minutes))
-    
-    # Create and display the message box
-    response = tk.messagebox.askokcancel("Save Reminder", message, parent=root)
+
+    response = messagebox.askokcancel("Save Reminder", message, parent=root)
 
     if response:
         on_ok()
@@ -80,22 +91,22 @@ def simulate_ctrl_s():
 
 def on_ctrl_s():
     global last_save_time
+    global numberSave
     last_save_time = time.time()
+    numberSave += 1
     debug_print("Ctrl+S was pressed. Updating last save time.")
 
 def create_image():
-    # Generate an image for the system tray icon
     width = 64
     height = 64
     image = Image.new('RGB', (width, height), (255, 255, 255))
     draw = ImageDraw.Draw(image)
-    draw.rectangle(
-        (width // 2 - 10, height // 2 - 10, width // 2 + 10, height // 2 + 10),
-        fill="black")
+    draw.rectangle((width // 2 - 10, height // 2 - 10, width // 2 + 10, height // 2 + 10), fill="black")
     return image
 
 def on_exit(icon, item):
     debug_print("Exiting script.")
+    show_exit_stats()
     terminate_event.set()
     icon.stop()
 
