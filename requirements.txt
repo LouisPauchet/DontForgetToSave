@@ -1,0 +1,6 @@
+pygetwindow==0.0.9
+pystray==0.19.4
+Pillow==8.2.0
+keyboard==0.13.5
+winshell==0.6
+pywin32==301
